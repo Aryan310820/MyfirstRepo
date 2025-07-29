@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EduGenius</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #f0f8ff);
+      color: #333;
+    }
+    header {
+      background-color: #0288d1;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 1rem;
+      font-weight: bold;
+    }
+    main {
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+    }
+    section {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #0288d1;
+      color: white;
+      margin-top: 2rem;
+    }
+    select, input[type="text"] {
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #0288d1;
+      color: white;
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background 0.3s ease, transform 0.2s;
+    }
+    button:hover {
+      background-color: #026aa7;
+      transform: scale(1.05);
+    }
+    .card {
+      background: #f9f9f9;
+      border-left: 4px solid #0288d1;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+    label {
+      display: block;
+      margin: 0.4rem 0;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>EduGenius</h1>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#notes">Notes</a>
+    <a href="#quiz">Quiz</a>
+    <a href="#ask">Ask AI</a>
+  </nav>
+</header>
+
+<main>
+  <section id="home">
+    <h2>Welcome to EduGenius</h2>
+    <p>Your interactive learning partner with notes, quizzes, and AI-powered answers!</p>
+  </section>
+
+  <section id="notes">
+    <h2>📚 Subject Notes</h2>
+    <select id="subjectSelect" onchange="loadNotes()">
+      <option value="">-- Choose Subject --</option>
+      <option value="math">Mathematics</option>
+      <option value="science">Science</option>
+      <option value="history">History</option>
+    </select>
+    <div id="notesContent"></div>
+  </section>
+
+  <section id="quiz">
+    <h2>📝 Take a Quiz</h2>
+    <label>Subject:
+      <select id="quizSubject">
+        <option value="math">Math</option>
+        <option value="science">Science</option>
+        <option value="history">History</option>
+      </select>
+    </label>
+    <label>Difficulty:
+      <select id="quizDifficulty">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+    </label>
+    <button onclick="startQuiz()">Start Quiz</button>
+    <div id="quizContainer"></div>
+    <div id="quizScore"></div>
+  </section>
+
+  <section id="ask">
+    <h2>🤖 Ask EduGenius AI</h2>
+    <input type="text" id="questionInput" placeholder="Enter your question...">
+    <button onclick="askAI()">Get Answer</button>
+    <div id="aiResponse" class="card"></div>
+  </section>
+</main>
+
+<footer>EduGenius © 2025</footer>
+
+<script>
+  // NOTES
+  const notesContent = {
+    math: "Mathematics is the study of numbers, quantities, and shapes. It includes topics like algebra, geometry, and calculus.",
+    science: "Science is the systematic study of the structure and behavior of the physical and natural world through observation and experiment.",
+    history: "History is the study of past events, particularly in human affairs. It helps us understand cultures, conflicts, and changes."
+  };
+  function loadNotes() {
+    const subject = document.getElementById("subjectSelect").value;
+    const container = document.getElementById("notesContent");
+    container.innerHTML = subject ? `<div class='card'>${notesContent[subject]}</div>` : "";
+  }
+
+  // QUIZ
+  const quizData = {
+    math: {
+      easy: [
+        { q: "What is 2 + 2?", options: ["3", "4", "5"], answer: "4" },
+        { q: "What is 10 - 7?", options: ["2", "3", "5"], answer: "3" }
+      ],
+      medium: [
+        { q: "What is 12 * 2?", options: ["24", "26", "22"], answer: "24" },
+        { q: "What is 25 / 5?", options: ["5", "10", "20"], answer: "5" }
+      ],
+      hard: [
+        { q: "What is the square root of 81?", options: ["9", "8", "7"], answer: "9" },
+        { q: "Solve: 3x = 12, x = ?", options: ["3", "4", "5"], answer: "4" }
+      ]
+    },
+    science: {
+      easy: [
+        { q: "What do plants need to make food?", options: ["Sunlight", "Sugar", "Water"], answer: "Sunlight" },
+        { q: "Water boils at what temperature?", options: ["100°C", "0°C", "50°C"], answer: "100°C" }
+      ],
+      medium: [
+        { q: "What gas do we breathe in?", options: ["Oxygen", "Carbon Dioxide", "Nitrogen"], answer: "Oxygen" },
+        { q: "Which organ pumps blood?", options: ["Lungs", "Brain", "Heart"], answer: "Heart" }
+      ],
+      hard: [
+        { q: "What is H2O?", options: ["Water", "Oxygen", "Hydrogen"], answer: "Water" },
+        { q: "What planet is known as the Red Planet?", options: ["Mars", "Venus", "Saturn"], answer: "Mars" }
+      ]
+    },
+    history: {
+      easy: [
+        { q: "Who was the first president of USA?", options: ["Abraham Lincoln", "George Washington", "John Adams"], answer: "George Washington" },
+        { q: "In which year did World War II end?", options: ["1945", "1940", "1950"], answer: "1945" }
+      ],
+      medium: [
+        { q: "Who discovered America?", options: ["Columbus", "Da Vinci", "Newton"], answer: "Columbus" },
+        { q: "Which country built the Great Wall?", options: ["India", "China", "Japan"], answer: "China" }
+      ],
+      hard: [
+        { q: "What was the name of Hitler's party?", options: ["Nazi", "Labour", "Republic"], answer: "Nazi" },
+        { q: "Which empire ruled India before independence?", options: ["British", "Roman", "French"], answer: "British" }
+      ]
+    }
+  };
+  function startQuiz() {
+    const subject = document.getElementById("quizSubject").value;
+    const difficulty = document.getElementById("quizDifficulty").value;
+    const container = document.getElementById("quizContainer");
+    const scoreDisplay = document.getElementById("quizScore");
+    const questions = quizData[subject][difficulty];
+
+    container.innerHTML = "";
+    scoreDisplay.innerText = "";
+
+    let score = 0;
+    let total = questions.length;
+
+    questions.forEach((q, idx) => {
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `<h4>${idx + 1}. ${q.q}</h4>` +
+        q.options.map(opt => `<label><input type='radio' name='q${idx}' value='${opt}'> ${opt}</label>`).join("<br>");
+      container.appendChild(div);
+    });
+
+    const submitBtn = document.createElement("button");
+    submitBtn.textContent = "Submit Quiz";
+    submitBtn.onclick = () => {
+      questions.forEach((q, idx) => {
+        const selected = document.querySelector(`input[name='q${idx}']:checked`);
+        if (selected && selected.value === q.answer) score++;
+      });
+      scoreDisplay.innerHTML = `🎯 You scored ${score}/${total}`;
+    };
+
+    container.appendChild(submitBtn);
+  }
+
+  // ASK AI
+  async function askAI() {
+    const question = document.getElementById("questionInput").value;
+    const responseDiv = document.getElementById("aiResponse");
+    responseDiv.innerHTML = "Thinking...";
+    try {
+      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer YOUR_OPENAI_API_KEY"
+        },
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: [{ role: "user", content: question }]
+        })
+      });
+      const data = await res.json();
+      responseDiv.innerText = data.choices[0].message.content;
+    } catch (err) {
+      responseDiv.innerText = "❌ Failed to fetch answer.";
+    }
+  }
+</script>
+</body>
+</html>
